@@ -1,10 +1,12 @@
 # CareFlow v2 - Hospital Staff Dashboard
 
-Digital healthcare management system for Tamil Nadu Government hospitals, designed to streamline patient flow and improve operational efficiency across OPD services.
+Digital healthcare management system developed for Tamil Nadu Government hospitals, designed to streamline patient flow and improve operational efficiency across OPD services.
 
 ## Overview
 
-CareFlow v2 is a comprehensive hospital staff dashboard developed for the Tamil Nadu Health & Family Welfare Department. The system enables real-time management of outpatient services, doctor availability, laboratory operations, and patient communication.
+CareFlow v2 is a comprehensive hospital staff dashboard created for the Tamil Nadu Health & Family Welfare Department. The system enables real-time management of outpatient services, doctor availability, laboratory operations, and patient communication.
+
+**Note:** This is an independent project developed for Tamil Nadu Government hospitals and is not an official government application.
 
 ## Key Features
 
@@ -108,17 +110,17 @@ CareFlowv2/
 
 ## Contributing
 
-This project is developed for the Tamil Nadu Government Health & Family Welfare Department. For any issues or improvements, please contact the development team.
+This project is developed for the Tamil Nadu Government Health & Family Welfare Department. Contributions, suggestions, and feedback are welcome!
 
 ## License
 
-© 2025 Tamil Nadu Government Health & Family Welfare Department. All rights reserved.
+This project is developed for public health services.
 
-## Support
+## Contact
 
-For technical support or queries:
-- Email: support@tnhealth.gov.in
-- Website: https://www.tn.gov.in/health
+For queries, suggestions, or support:
+- **Email**: Harishv06.edu@gmail.com
+- **Project**: CareFlow v2 - Hospital Management System
 - `npm run lint` - Run ESLint
 
 ## Project Structure

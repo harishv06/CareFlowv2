@@ -31,4 +31,10 @@ All notable changes to the CareFlow v2 Hospital Staff Dashboard will be document
 
 ## Development Notes
 
-This version represents the first production-ready release of the CareFlow v2 system, designed specifically for Tamil Nadu Government hospitals to improve operational efficiency and patient experience.
+This version represents the first production-ready release of the CareFlow v2 system, developed independently for Tamil Nadu Government hospitals to improve operational efficiency and patient experience.
+
+## Project Info
+
+Developed by: Harish  
+Contact: Harishv06.edu@gmail.com  
+Purpose: Healthcare management for Tamil Nadu Government hospitals

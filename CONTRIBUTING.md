@@ -1,6 +1,8 @@
 # Contributing to CareFlow v2
 
-Thank you for your interest in contributing to CareFlow v2, the Hospital Staff Dashboard for Tamil Nadu Government Health Department.
+Thank you for your interest in contributing to CareFlow v2, a Hospital Staff Dashboard developed for Tamil Nadu Government Health Department.
+
+**Note:** This is an independent open-source project created for government health services, not an official government application.
 
 ## Development Guidelines
 
@@ -27,8 +29,16 @@ Thank you for your interest in contributing to CareFlow v2, the Hospital Staff D
 
 ## Reporting Issues
 
-If you encounter any bugs or have feature requests, please report them through the appropriate channels within the department.
+If you encounter any bugs or have feature requests, please:
+- Create an issue on GitHub
+- Email: Harishv06.edu@gmail.com
 
 ## Code Review Process
 
-All code changes are reviewed by the IT team before being merged into the main branch.
+All code changes are reviewed before being merged into the main branch.
+
+## Questions or Suggestions?
+
+Feel free to reach out:
+- **Email**: Harishv06.edu@gmail.com
+- Open a discussion on GitHub

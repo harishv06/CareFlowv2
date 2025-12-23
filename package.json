@@ -2,7 +2,7 @@
   "name": "careflow-v2",
   "version": "1.0.0",
   "description": "Hospital Staff Dashboard for Tamil Nadu Government Health Department",
-  "author": "Tamil Nadu Health Department IT Team",
+  "author": "Harish <Harishv06.edu@gmail.com>",
   "type": "module",
   "scripts": {
     "dev": "vite",
