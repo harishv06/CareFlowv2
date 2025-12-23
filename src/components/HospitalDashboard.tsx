@@ -1,31 +1,45 @@
+/**
+ * HospitalDashboard Component
+ * 
+ * Main dashboard interface for hospital staff to manage:
+ * - Doctor availability status
+ * - OPD queue and token system
+ * - Laboratory operations and equipment status
+ * - Patient alert notifications
+ * 
+ * @component
+ * @returns {JSX.Element} Hospital Staff Dashboard
+ */
+
 import { useState, useEffect } from 'react';
 import { Clock, User, Check, AlertTriangle, X } from 'lucide-react';
 import type { Doctor, Lab, QueueStatus, DoctorStatus, LabStatus, EquipmentStatus } from '../types';
 
 export default function HospitalDashboard() {
+  // Time display updated every minute
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })
   );
   
-  // Doctor status state
+  // Doctor availability management
   const [doctors, setDoctors] = useState<Doctor[]>([
     { id: 1, name: 'Dr. Rajesh Kumar', status: 'available' },
     { id: 2, name: 'Dr. Priya Sharma', status: 'busy' },
     { id: 3, name: 'Dr. Amit Patel', status: 'not-available' }
   ]);
   
-  // OPD Queue state
+  // OPD queue management
   const [currentToken, setCurrentToken] = useState(45);
   const [queueStatus, setQueueStatus] = useState<QueueStatus>('active');
   
-  // Lab status state
+  // Laboratory status tracking
   const [labs, setLabs] = useState<Lab[]>([
     { id: 1, name: 'Blood Test Lab', status: 'open', equipment: 'working' },
     { id: 2, name: 'X-Ray Department', status: 'busy', equipment: 'maintenance' },
     { id: 3, name: 'Ultrasound Lab', status: 'open', equipment: 'working' }
   ]);
   
-  // Override and alerts state
+  // Manual override and alert system states
   const [overrideDept, setOverrideDept] = useState('');
   const [overrideStatus, setOverrideStatus] = useState('');
   const [alertType, setAlertType] = useState('');
@@ -531,3 +545,4 @@ export default function HospitalDashboard() {
     </div>
   );
 }
+

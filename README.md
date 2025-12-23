@@ -1,33 +1,58 @@
 # CareFlow v2 - Hospital Staff Dashboard
 
-A modern hospital management dashboard for the Tamil Nadu Government Health & Family Welfare Department.
+Digital healthcare management system for Tamil Nadu Government hospitals, designed to streamline patient flow and improve operational efficiency across OPD services.
 
-## Features
+## Overview
 
-- **Doctor Status Management**: Real-time tracking of doctor availability
-- **OPD Queue Management**: Token-based queue system for outpatient departments
-- **Lab Status Monitoring**: Track status and equipment health of various labs
-- **Manual Override**: Staff can override AI predictions for department status
-- **Patient Alerts**: Send SMS alerts to patients for delays, closures, and custom messages
+CareFlow v2 is a comprehensive hospital staff dashboard developed for the Tamil Nadu Health & Family Welfare Department. The system enables real-time management of outpatient services, doctor availability, laboratory operations, and patient communication.
 
-## Tech Stack
+## Key Features
 
-- **React 18** with TypeScript
-- **Vite** for fast development and building
-- **Tailwind CSS** for styling
-- **Lucide React** for icons
+### Doctor Management
+- Real-time availability tracking for medical staff
+- Three-state status system (Available, Busy, Not Available)
+- Quick status updates with visual indicators
 
-## Getting Started
+### OPD Queue System
+- Digital token-based patient queue management
+- Live current and next token display
+- Queue control with start, pause, and skip functionality
+- Visual status indicators for queue state
 
-### Prerequisites
+### Laboratory Management
+- Status tracking for multiple laboratory departments
+- Equipment health monitoring
+- Three-state operation status (Open, Busy, Closed)
 
-- Node.js 18+ and npm
+### Alert System
+- SMS notification system for patients
+- Pre-configured quick message templates
+- Custom message support for specific situations
+- Targeted alerts by department
 
-### Installation
+### Manual Controls
+- Override capabilities for automated predictions
+- Department-specific status updates
+- Comprehensive notes and logging
+
+## Technology Stack
+
+- **Frontend Framework**: React 18 with TypeScript
+- **Build Tool**: Vite 5
+- **Styling**: Tailwind CSS 3
+- **Icons**: Lucide React
+- **Code Quality**: ESLint with TypeScript support
+
+## Prerequisites
+
+- Node.js 18.x or higher
+- npm 9.x or higher
+
+## Installation
 
 1. Clone the repository:
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/your-username/CareFlowv2.git
 cd CareFlowv2
 ```
 
@@ -41,13 +66,59 @@ npm install
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+4. Access the application at `http://localhost:5173`
 
-## Available Scripts
+## Build for Production
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
+```bash
+npm run build
+```
+
+The optimized production build will be generated in the `dist` directory.
+
+## Project Structure
+
+```
+CareFlowv2/
+├── public/                          # Static assets
+│   └── tamilnadu-government-logo-01.png
+├── src/
+│   ├── components/                  # React components
+│   │   └── HospitalDashboard.tsx   # Main dashboard component
+│   ├── types/                       # TypeScript type definitions
+│   │   └── index.ts
+│   ├── App.tsx                      # Root component
+│   ├── main.tsx                     # Application entry point
+│   └── index.css                    # Global styles
+├── index.html                       # HTML template
+├── package.json                     # Project dependencies
+├── tsconfig.json                    # TypeScript configuration
+├── vite.config.ts                   # Vite configuration
+└── tailwind.config.js              # Tailwind CSS configuration
+```
+
+## Development
+
+### Available Scripts
+
+- `npm run dev` - Start development server with hot module replacement
+- `npm run build` - Create optimized production build
+- `npm run preview` - Preview production build locally
+- `npm run lint` - Run ESLint for code quality checks
+
+## Contributing
+
+This project is developed for the Tamil Nadu Government Health & Family Welfare Department. For any issues or improvements, please contact the development team.
+
+## License
+
+© 2025 Tamil Nadu Government Health & Family Welfare Department. All rights reserved.
+
+## Support
+
+For technical support or queries:
+- Email: support@tnhealth.gov.in
+- Website: https://www.tn.gov.in/health
 - `npm run lint` - Run ESLint
 
 ## Project Structure
