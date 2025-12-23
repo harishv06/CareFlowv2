@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Clock, User, Check, AlertTriangle, X } from 'lucide-react';
 import type { Doctor, Lab, QueueStatus, DoctorStatus, LabStatus, EquipmentStatus } from '../types';
 
@@ -43,7 +43,7 @@ export default function HospitalDashboard() {
   }, []);
 
   const updateDoctorStatus = (doctorId: number, newStatus: DoctorStatus) => {
-    setDoctors(doctors.map(doc => 
+    setDoctors(doctors.map((doc: Doctor) => 
       doc.id === doctorId ? { ...doc, status: newStatus } : doc
     ));
     showSuccess('Doctor status updated');
@@ -70,7 +70,7 @@ export default function HospitalDashboard() {
   };
 
   const updateLabStatus = (labId: number, newStatus: LabStatus) => {
-    setLabs(labs.map(lab => 
+    setLabs(labs.map((lab: Lab) => 
       lab.id === labId ? { ...lab, status: newStatus } : lab
     ));
     showSuccess('Lab status updated');
@@ -126,6 +126,19 @@ export default function HospitalDashboard() {
         return <X className="w-5 h-5 text-red-600" />;
       default:
         return null;
+    }
+  };
+
+  const getEquipmentStatusText = (equipment: EquipmentStatus): string => {
+    switch(equipment) {
+      case 'working':
+        return 'Working';
+      case 'maintenance':
+        return 'Maintenance';
+      case 'out-of-service':
+        return 'Out of Service';
+      default:
+        return 'Unknown';
     }
   };
 
@@ -318,7 +331,7 @@ export default function HospitalDashboard() {
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700 bg-gray-50 p-2 rounded border border-gray-300">
                     {getEquipmentIcon(lab.equipment)}
-                    <span className="font-semibold">Equipment: {lab.equipment === 'working' ? 'Working' : lab.equipment === 'maintenance' ? 'Maintenance' : 'Out of Service'}</span>
+                    <span className="font-semibold">Equipment: {getEquipmentStatusText(lab.equipment)}</span>
                   </div>
                 </div>
               ))}
@@ -339,8 +352,9 @@ export default function HospitalDashboard() {
                 <div className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm font-bold text-gray-700 mb-1">Select Department</label>
+                      <label htmlFor="override-dept" className="block text-sm font-bold text-gray-700 mb-1">Select Department</label>
                       <select
+                        id="override-dept"
                         value={overrideDept}
                         onChange={(e) => setOverrideDept(e.target.value)}
                         className="w-full border-2 border-gray-400 rounded px-3 py-2 font-semibold"
@@ -353,8 +367,9 @@ export default function HospitalDashboard() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-bold text-gray-700 mb-1">Override Status</label>
+                      <label htmlFor="override-status" className="block text-sm font-bold text-gray-700 mb-1">Override Status</label>
                       <select
+                        id="override-status"
                         value={overrideStatus}
                         onChange={(e) => setOverrideStatus(e.target.value)}
                         className="w-full border-2 border-gray-400 rounded px-3 py-2 font-semibold"
@@ -367,8 +382,9 @@ export default function HospitalDashboard() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-1">Notes (optional)</label>
+                    <label htmlFor="override-notes" className="block text-sm font-bold text-gray-700 mb-1">Notes (optional)</label>
                     <textarea
+                      id="override-notes"
                       className="w-full border-2 border-gray-400 rounded px-3 py-2"
                       rows={2}
                       placeholder="Enter notes..."
@@ -389,8 +405,9 @@ export default function HospitalDashboard() {
                 <div className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm font-bold text-gray-700 mb-1">Alert Type</label>
+                      <label htmlFor="alert-type" className="block text-sm font-bold text-gray-700 mb-1">Alert Type</label>
                       <select
+                        id="alert-type"
                         value={alertType}
                         onChange={(e) => setAlertType(e.target.value)}
                         className="w-full border-2 border-gray-400 rounded px-3 py-2 font-semibold"
@@ -402,8 +419,9 @@ export default function HospitalDashboard() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-bold text-gray-700 mb-1">Affected Dept.</label>
+                      <label htmlFor="affected-dept" className="block text-sm font-bold text-gray-700 mb-1">Affected Dept.</label>
                       <select
+                        id="affected-dept"
                         value={affectedDept}
                         onChange={(e) => setAffectedDept(e.target.value)}
                         className="w-full border-2 border-gray-400 rounded px-3 py-2 font-semibold"
