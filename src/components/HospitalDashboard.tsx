@@ -150,10 +150,12 @@ export default function HospitalDashboard() {
           {/* Top bar with emblem */}
           <div className="flex items-center justify-center gap-6 pb-4 border-b border-red-600">
             <div className="flex items-center gap-5">
-              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center">
-                <div className="text-red-700 font-bold text-base text-center leading-tight">
-                  TN<br/>GOVT
-                </div>
+              <div className="w-24 h-24 rounded-full flex items-center justify-center p-1">
+                <img 
+                  src="/tamilnadu-government-logo-01.png" 
+                  alt="Tamil Nadu Government Logo" 
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div className="text-center">
                 <div className="text-xl font-semibold">தமிழ்நாடு அரசு | Government of Tamil Nadu</div>
