@@ -1,0 +1,513 @@
+import React, { useState, useEffect } from 'react';
+import { Clock, User, Check, AlertTriangle, X } from 'lucide-react';
+import type { Doctor, Lab, QueueStatus, DoctorStatus, LabStatus, EquipmentStatus } from '../types';
+
+export default function HospitalDashboard() {
+  const [currentTime, setCurrentTime] = useState(
+    new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })
+  );
+  
+  // Doctor status state
+  const [doctors, setDoctors] = useState<Doctor[]>([
+    { id: 1, name: 'Dr. Rajesh Kumar', status: 'available' },
+    { id: 2, name: 'Dr. Priya Sharma', status: 'busy' },
+    { id: 3, name: 'Dr. Amit Patel', status: 'not-available' }
+  ]);
+  
+  // OPD Queue state
+  const [currentToken, setCurrentToken] = useState(45);
+  const [queueStatus, setQueueStatus] = useState<QueueStatus>('active');
+  
+  // Lab status state
+  const [labs, setLabs] = useState<Lab[]>([
+    { id: 1, name: 'Blood Test Lab', status: 'open', equipment: 'working' },
+    { id: 2, name: 'X-Ray Department', status: 'busy', equipment: 'maintenance' },
+    { id: 3, name: 'Ultrasound Lab', status: 'open', equipment: 'working' }
+  ]);
+  
+  // Override and alerts state
+  const [overrideDept, setOverrideDept] = useState('');
+  const [overrideStatus, setOverrideStatus] = useState('');
+  const [alertType, setAlertType] = useState('');
+  const [affectedDept, setAffectedDept] = useState('');
+  const [showConfirmSkip, setShowConfirmSkip] = useState(false);
+  const [showConfirmSMS, setShowConfirmSMS] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
+  // Update time every minute
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }));
+    }, 60000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const updateDoctorStatus = (doctorId: number, newStatus: DoctorStatus) => {
+    setDoctors(doctors.map(doc => 
+      doc.id === doctorId ? { ...doc, status: newStatus } : doc
+    ));
+    showSuccess('Doctor status updated');
+  };
+
+  const startQueue = () => {
+    setQueueStatus('active');
+    showSuccess('Queue started');
+  };
+
+  const pauseQueue = () => {
+    setQueueStatus('paused');
+    showSuccess('Queue paused');
+  };
+
+  const skipToken = () => {
+    setShowConfirmSkip(true);
+  };
+
+  const confirmSkip = () => {
+    setCurrentToken(currentToken + 1);
+    setShowConfirmSkip(false);
+    showSuccess('Token skipped');
+  };
+
+  const updateLabStatus = (labId: number, newStatus: LabStatus) => {
+    setLabs(labs.map(lab => 
+      lab.id === labId ? { ...lab, status: newStatus } : lab
+    ));
+    showSuccess('Lab status updated');
+  };
+
+  const applyOverride = () => {
+    if (overrideDept && overrideStatus) {
+      showSuccess('Override applied successfully');
+      setOverrideDept('');
+      setOverrideStatus('');
+    }
+  };
+
+  const sendAlert = (message: string) => {
+    setAlertType(message);
+    setShowConfirmSMS(true);
+  };
+
+  const confirmSendSMS = () => {
+    showSuccess('Alert sent to 127 patients');
+    setShowConfirmSMS(false);
+    setAlertType('');
+    setAffectedDept('');
+  };
+
+  const showSuccess = (message: string) => {
+    setSuccessMessage(message);
+    setTimeout(() => setSuccessMessage(''), 3000);
+  };
+
+  const getStatusColor = (status: DoctorStatus | LabStatus) => {
+    switch(status) {
+      case 'available':
+      case 'open':
+        return 'bg-green-600';
+      case 'busy':
+        return 'bg-orange-500';
+      case 'not-available':
+      case 'closed':
+        return 'bg-red-600';
+      default:
+        return 'bg-gray-500';
+    }
+  };
+
+  const getEquipmentIcon = (equipment: EquipmentStatus) => {
+    switch(equipment) {
+      case 'working':
+        return <Check className="w-5 h-5 text-green-600" />;
+      case 'maintenance':
+        return <AlertTriangle className="w-5 h-5 text-orange-600" />;
+      case 'out-of-service':
+        return <X className="w-5 h-5 text-red-600" />;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-amber-50">
+      {/* TN Government Header with Emblem Colors */}
+      <div className="bg-gradient-to-r from-red-700 to-red-800 text-white shadow-lg">
+        <div className="max-w-7xl mx-auto px-6 py-3">
+          {/* Top bar with emblem */}
+          <div className="flex items-center justify-center gap-4 pb-2 border-b border-red-600">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+                <div className="text-red-700 font-bold text-xs text-center leading-tight">
+                  TN<br/>GOVT
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm font-semibold">தமிழ்நாடு அரசு | Government of Tamil Nadu</div>
+                <div className="text-xs opacity-90">சுகாதாரம் மற்றும் குடும்ப நல துறை | Health & Family Welfare Department</div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Main header */}
+          <div className="flex justify-between items-center pt-3">
+            <h1 className="text-xl font-bold">Hospital Staff Dashboard | மருத்துவமனை பணியாளர் டாஷ்போர்டு</h1>
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2 bg-red-900 px-3 py-1 rounded">
+                <Clock className="w-4 h-4" />
+                <span className="text-sm font-semibold">{currentTime}</span>
+              </div>
+              <div className="flex items-center gap-2 bg-red-900 px-3 py-1 rounded">
+                <User className="w-4 h-4" />
+                <span className="text-sm">Staff User</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Success Message */}
+      {successMessage && (
+        <div className="max-w-7xl mx-auto px-6 mt-4">
+          <div className="bg-green-50 border-l-4 border-green-600 text-green-800 px-4 py-3 rounded shadow">
+            <strong>✓</strong> {successMessage}
+          </div>
+        </div>
+      )}
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 py-6">
+        {/* Top Row - Three Columns */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          {/* Doctor Status Panel */}
+          <div className="bg-white rounded border-2 border-red-200 shadow-md overflow-hidden">
+            <div className="bg-red-700 text-white px-4 py-3">
+              <h2 className="text-lg font-bold">DOCTOR STATUS | மருத்துவர் நிலை</h2>
+            </div>
+            <div className="p-4 space-y-4">
+              {doctors.map(doctor => (
+                <div key={doctor.id} className="pb-4 border-b-2 border-gray-200 last:border-b-0">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className={`w-4 h-4 rounded-full ${getStatusColor(doctor.status)} border-2 border-gray-300`}></div>
+                    <span className="font-bold text-gray-800">{doctor.name}</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    <button
+                      onClick={() => updateDoctorStatus(doctor.id, 'available')}
+                      className={`py-2 px-2 rounded text-sm font-bold border-2 transition-colors ${
+                        doctor.status === 'available'
+                          ? 'bg-green-600 text-white border-green-700'
+                          : 'bg-white border-gray-400 text-gray-700 hover:border-green-600'
+                      }`}
+                    >
+                      Available
+                    </button>
+                    <button
+                      onClick={() => updateDoctorStatus(doctor.id, 'busy')}
+                      className={`py-2 px-2 rounded text-sm font-bold border-2 transition-colors ${
+                        doctor.status === 'busy'
+                          ? 'bg-orange-500 text-white border-orange-600'
+                          : 'bg-white border-gray-400 text-gray-700 hover:border-orange-500'
+                      }`}
+                    >
+                      Busy
+                    </button>
+                    <button
+                      onClick={() => updateDoctorStatus(doctor.id, 'not-available')}
+                      className={`py-2 px-2 rounded text-sm font-bold border-2 transition-colors ${
+                        doctor.status === 'not-available'
+                          ? 'bg-red-600 text-white border-red-700'
+                          : 'bg-white border-gray-400 text-gray-700 hover:border-red-600'
+                      }`}
+                    >
+                      Not Avail.
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* OPD Queue Management */}
+          <div className="bg-white rounded border-2 border-red-200 shadow-md overflow-hidden">
+            <div className="bg-red-700 text-white px-4 py-3">
+              <h2 className="text-lg font-bold">OPD QUEUE | வெளி நோயாளி வரிசை</h2>
+            </div>
+            <div className="p-4 space-y-4">
+              <div>
+                <p className="text-sm font-bold text-gray-700 mb-2">CURRENT TOKEN | தற்போதைய டோக்கன்</p>
+                <div className="border-4 border-blue-600 bg-blue-50 rounded-lg p-4 text-center">
+                  <span className="text-6xl font-bold text-blue-700">{currentToken}</span>
+                </div>
+              </div>
+              <div>
+                <p className="text-sm font-bold text-gray-700 mb-2">NEXT TOKEN | அடுத்த டோக்கன்</p>
+                <div className="border-2 border-gray-400 bg-gray-50 rounded-lg p-3 text-center">
+                  <span className="text-4xl font-bold text-gray-700">{currentToken + 1}</span>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={startQueue}
+                  disabled={queueStatus === 'active'}
+                  className="py-3 px-3 rounded font-bold border-2 bg-green-600 text-white border-green-700 disabled:bg-gray-300 disabled:border-gray-400 disabled:cursor-not-allowed"
+                >
+                  START QUEUE
+                </button>
+                <button
+                  onClick={pauseQueue}
+                  disabled={queueStatus === 'paused'}
+                  className="py-3 px-3 rounded font-bold border-2 bg-orange-500 text-white border-orange-600 disabled:bg-gray-300 disabled:border-gray-400 disabled:cursor-not-allowed"
+                >
+                  PAUSE QUEUE
+                </button>
+              </div>
+              <button
+                onClick={skipToken}
+                className="w-full py-3 px-4 rounded font-bold border-2 bg-red-600 text-white border-red-700"
+              >
+                SKIP TOKEN
+              </button>
+              <div className="flex items-center gap-2 text-sm bg-gray-100 p-2 rounded border border-gray-300">
+                <div className={`w-3 h-3 rounded-full ${queueStatus === 'active' ? 'bg-green-600' : 'bg-orange-500'}`}></div>
+                <span className="font-semibold text-gray-800">Status: {queueStatus === 'active' ? 'Queue Active' : 'Queue Paused'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Lab Status Management */}
+          <div className="bg-white rounded border-2 border-red-200 shadow-md overflow-hidden">
+            <div className="bg-red-700 text-white px-4 py-3">
+              <h2 className="text-lg font-bold">LAB STATUS | ஆய்வக நிலை</h2>
+            </div>
+            <div className="p-4 space-y-4">
+              {labs.map(lab => (
+                <div key={lab.id} className="pb-4 border-b-2 border-gray-200 last:border-b-0">
+                  <div className="font-bold text-gray-800 mb-2">{lab.name}</div>
+                  <div className="grid grid-cols-3 gap-2 mb-2">
+                    <button
+                      onClick={() => updateLabStatus(lab.id, 'open')}
+                      className={`py-2 px-2 rounded text-sm font-bold border-2 transition-colors ${
+                        lab.status === 'open'
+                          ? 'bg-green-600 text-white border-green-700'
+                          : 'bg-white border-gray-400 text-gray-700 hover:border-green-600'
+                      }`}
+                    >
+                      Open
+                    </button>
+                    <button
+                      onClick={() => updateLabStatus(lab.id, 'busy')}
+                      className={`py-2 px-2 rounded text-sm font-bold border-2 transition-colors ${
+                        lab.status === 'busy'
+                          ? 'bg-orange-500 text-white border-orange-600'
+                          : 'bg-white border-gray-400 text-gray-700 hover:border-orange-500'
+                      }`}
+                    >
+                      Busy
+                    </button>
+                    <button
+                      onClick={() => updateLabStatus(lab.id, 'closed')}
+                      className={`py-2 px-2 rounded text-sm font-bold border-2 transition-colors ${
+                        lab.status === 'closed'
+                          ? 'bg-red-600 text-white border-red-700'
+                          : 'bg-white border-gray-400 text-gray-700 hover:border-red-600'
+                      }`}
+                    >
+                      Closed
+                    </button>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-700 bg-gray-50 p-2 rounded border border-gray-300">
+                    {getEquipmentIcon(lab.equipment)}
+                    <span className="font-semibold">Equipment: {lab.equipment === 'working' ? 'Working' : lab.equipment === 'maintenance' ? 'Maintenance' : 'Out of Service'}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Row - Override & Alerts */}
+        <div className="bg-white rounded border-2 border-red-200 shadow-md overflow-hidden">
+          <div className="bg-red-700 text-white px-4 py-3">
+            <h2 className="text-lg font-bold">MANUAL OVERRIDE & ALERTS | கைமுறை மேலெழுதல் & எச்சரிக்கைகள்</h2>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Manual Override */}
+              <div className="border-2 border-gray-300 rounded-lg p-4 bg-amber-50">
+                <h3 className="font-bold text-gray-800 mb-3 text-lg border-b-2 border-gray-300 pb-2">OVERRIDE AI PREDICTION</h3>
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Select Department</label>
+                      <select
+                        value={overrideDept}
+                        onChange={(e) => setOverrideDept(e.target.value)}
+                        className="w-full border-2 border-gray-400 rounded px-3 py-2 font-semibold"
+                      >
+                        <option value="">Choose...</option>
+                        <option value="opd">OPD</option>
+                        <option value="blood-lab">Blood Test Lab</option>
+                        <option value="xray">X-Ray Department</option>
+                        <option value="ultrasound">Ultrasound Lab</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Override Status</label>
+                      <select
+                        value={overrideStatus}
+                        onChange={(e) => setOverrideStatus(e.target.value)}
+                        className="w-full border-2 border-gray-400 rounded px-3 py-2 font-semibold"
+                      >
+                        <option value="">Choose...</option>
+                        <option value="open">Open</option>
+                        <option value="busy">Busy</option>
+                        <option value="closed">Closed</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">Notes (optional)</label>
+                    <textarea
+                      className="w-full border-2 border-gray-400 rounded px-3 py-2"
+                      rows={2}
+                      placeholder="Enter notes..."
+                    ></textarea>
+                  </div>
+                  <button
+                    onClick={applyOverride}
+                    className="w-full py-3 px-4 rounded font-bold border-2 bg-yellow-500 text-gray-900 border-yellow-600"
+                  >
+                    APPLY OVERRIDE
+                  </button>
+                </div>
+              </div>
+
+              {/* Send Patient Alerts */}
+              <div className="border-2 border-gray-300 rounded-lg p-4 bg-amber-50">
+                <h3 className="font-bold text-gray-800 mb-3 text-lg border-b-2 border-gray-300 pb-2">SEND PATIENT ALERTS</h3>
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Alert Type</label>
+                      <select
+                        value={alertType}
+                        onChange={(e) => setAlertType(e.target.value)}
+                        className="w-full border-2 border-gray-400 rounded px-3 py-2 font-semibold"
+                      >
+                        <option value="">Choose...</option>
+                        <option value="delay">Delay Notice</option>
+                        <option value="closure">Closure Notice</option>
+                        <option value="custom">Custom Message</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Affected Dept.</label>
+                      <select
+                        value={affectedDept}
+                        onChange={(e) => setAffectedDept(e.target.value)}
+                        className="w-full border-2 border-gray-400 rounded px-3 py-2 font-semibold"
+                      >
+                        <option value="">Choose...</option>
+                        <option value="all">All Departments</option>
+                        <option value="opd">OPD</option>
+                        <option value="labs">All Labs</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-gray-700 mb-2">Quick Messages:</p>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => sendAlert('Doctor Delayed')}
+                        className="py-2 px-3 rounded bg-white border-2 border-gray-400 text-gray-800 text-sm font-bold hover:border-blue-600"
+                      >
+                        Doctor Delayed
+                      </button>
+                      <button
+                        onClick={() => sendAlert('Lab Closed')}
+                        className="py-2 px-3 rounded bg-white border-2 border-gray-400 text-gray-800 text-sm font-bold hover:border-blue-600"
+                      >
+                        Lab Closed
+                      </button>
+                      <button
+                        onClick={() => sendAlert('Queue Paused')}
+                        className="py-2 px-3 rounded bg-white border-2 border-gray-400 text-gray-800 text-sm font-bold hover:border-blue-600"
+                      >
+                        Queue Paused
+                      </button>
+                      <button
+                        onClick={() => sendAlert('Custom')}
+                        className="py-2 px-3 rounded bg-white border-2 border-gray-400 text-gray-800 text-sm font-bold hover:border-blue-600"
+                      >
+                        Custom...
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowConfirmSMS(true)}
+                    className="w-full py-3 px-4 rounded font-bold border-2 bg-red-600 text-white border-red-700"
+                  >
+                    SEND SMS ALERT
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Skip Token Confirmation Modal */}
+      {showConfirmSkip && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg border-4 border-red-600 p-6 max-w-md w-full shadow-2xl">
+            <div className="bg-red-700 text-white px-4 py-2 -mx-6 -mt-6 mb-4 rounded-t">
+              <h3 className="text-xl font-bold">Confirm Skip Token</h3>
+            </div>
+            <p className="text-gray-800 mb-6 font-semibold">Are you sure you want to skip token {currentToken}?</p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowConfirmSkip(false)}
+                className="flex-1 py-3 px-4 rounded border-2 border-gray-400 text-gray-800 font-bold hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmSkip}
+                className="flex-1 py-3 px-4 rounded bg-red-600 text-white font-bold border-2 border-red-700"
+              >
+                Confirm Skip
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SMS Alert Confirmation Modal */}
+      {showConfirmSMS && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg border-4 border-red-600 p-6 max-w-md w-full shadow-2xl">
+            <div className="bg-red-700 text-white px-4 py-2 -mx-6 -mt-6 mb-4 rounded-t">
+              <h3 className="text-xl font-bold">Confirm Send SMS</h3>
+            </div>
+            <p className="text-gray-800 mb-6 font-semibold">Send alert "{alertType}" to all affected patients?</p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowConfirmSMS(false)}
+                className="flex-1 py-3 px-4 rounded border-2 border-gray-400 text-gray-800 font-bold hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmSendSMS}
+                className="flex-1 py-3 px-4 rounded bg-red-600 text-white font-bold border-2 border-red-700"
+              >
+                Send SMS
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
